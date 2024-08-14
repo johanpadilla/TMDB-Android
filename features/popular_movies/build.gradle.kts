@@ -54,7 +54,14 @@ dependencies {
 
     ksp(libs.google.dagger.hilt.compiler)
 
+    kspAndroidTest(libs.google.dagger.hilt.compiler)
+    androidTestImplementation(libs.dagger.hilt.android.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

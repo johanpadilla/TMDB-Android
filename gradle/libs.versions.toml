@@ -20,6 +20,10 @@ okhttp = "4.12.0"
 kotlinx-coroutines = "1.8.0"
 composeNavigation = "2.8.0-beta07"
 navigationCommonKtx = "2.7.7"
+mockito = "5.7.0"
+mockito-kotlin = "5.4.0"
+core-testing = "2.2.0"
+turbine = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +59,11 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
+mockito = { module = "org.mockito:mockito-core", version.ref="mockito"}
+mockito-kotlin = {module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin"}
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "core-testing"}
+turbine = {module = "app.cash.turbine:turbine", version.ref = "turbine"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
