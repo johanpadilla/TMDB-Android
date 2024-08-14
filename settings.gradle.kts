@@ -22,3 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "TMDB-Android"
 include(":app")
 include(":network")
+include(":features")
+include(":features:popular_movies")
+include(":features:navigation")
