@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "TMDB-Android"
 include(":app")
+include(":network")

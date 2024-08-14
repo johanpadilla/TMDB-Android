@@ -8,9 +8,16 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
+serialization = "1.6.3"
 hiltVersion = "2.49"
 hiltNavigation = "1.2.0"
 ksp = "2.0.0-1.0.24"
+appcompat = "1.7.0"
+material = "1.12.0"
+retrofit = "2.10.0"
+moshi = "1.15.1"
+okhttp = "4.12.0"
+kotlinx-coroutines = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,11 +35,21 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 google-dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
 google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion" }
 androidx-hilt-navigation-compose = {group = "androidx.hilt", name ="hilt-navigation-compose", version.ref="hiltNavigation"}
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 
 dagger-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltVersion" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -40,4 +57,6 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
+kotlin-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+android-library = { id = "com.android.library", version.ref = "agp" }
 
