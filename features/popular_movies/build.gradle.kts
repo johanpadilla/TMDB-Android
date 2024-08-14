@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.dagger.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -45,6 +47,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.google.dagger.hilt)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(project(":network"))
+
+    ksp(libs.google.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
