@@ -12,6 +12,7 @@ Android-Kotlin based application, which demonstrate knowledge of Android trends 
 - Unit testing.
 - Coil: Image Loading Library
 - Extension functions.
+- Multi-module features.
 
 
 
