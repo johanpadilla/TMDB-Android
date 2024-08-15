@@ -2,12 +2,13 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.dagger.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.johan.navigation"
-    compileSdk = 35
+    namespace = "com.johan.details_movie"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -26,23 +27,29 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(project(":features:popular_movies"))
-    implementation(project(":features:details_movie"))
+    implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.google.dagger.hilt)
+
+    ksp(libs.google.dagger.hilt.compiler)
+
+    implementation(project(":network"))
+    implementation(project(":features:shared"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

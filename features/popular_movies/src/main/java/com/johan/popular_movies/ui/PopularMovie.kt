@@ -31,7 +31,7 @@ const val POPULAR_MOVIE_COLUMNS = 2
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularMovieScreen(
-   // onPopularMovieClicked: (String) -> Unit,
+   onPopularMovieClicked: (String) -> Unit,
     //navController: NavController,
     viewModel: PopularMovieViewModel = hiltViewModel()
 ) {
@@ -79,6 +79,7 @@ fun PopularMovieScreen(
                                         MovieCard(
                                             popularMovie = chunkedList[index][0],
                                             onPopularMovieClick = {
+                                                onPopularMovieClicked.invoke(chunkedList[index][0].id.toString())
                                                 /*navController.navigate(
                                                     MovieDetailsScreen(chunkedList[index][0].id.toString())
                                                 )*/
@@ -87,6 +88,7 @@ fun PopularMovieScreen(
                                         MovieCard(
                                             popularMovie = chunkedList[index][1],
                                             onPopularMovieClick = {
+                                                onPopularMovieClicked.invoke(chunkedList[index][1].id.toString())
                                         /*        navController.navigate(
                                                     MovieDetailsScreen(chunkedList[index][1].id.toString())
                                                 )*/
@@ -98,6 +100,7 @@ fun PopularMovieScreen(
                                     MovieCard(
                                         popularMovie = chunkedList[index][0],
                                         onPopularMovieClick = {
+                                            onPopularMovieClicked.invoke(chunkedList[index][0].id.toString())
                                             /*navController.navigate(
                                                 MovieDetailsScreen(chunkedList[index][0].id.toString())
                                             )*/

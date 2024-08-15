@@ -23,7 +23,7 @@ import kotlin.coroutines.CoroutineContext
 @HiltViewModel
 class PopularMovieViewModel @Inject constructor(
     private val popularMovieRepository: PopularMovieRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineContext
+    private val ioDispatcher: CoroutineContext
 ) : ViewModel() {
 
     private val restarter = SharingStarted.WhileSubscribed(FIVE_SECONDS).makeRestartable()

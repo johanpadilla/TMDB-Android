@@ -1,7 +1,7 @@
 package com.johan.popular_movies.model
 
 import com.johan.network.model.Results
-import com.johan.popular_movies.utils.toFullPosterURL
+import com.johan.shared.utils.toFullPosterURL
 
 sealed class PopularMovieState {
     data object Loading : PopularMovieState()

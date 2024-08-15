@@ -1,4 +1,4 @@
-package com.johan.popular_movies.utils
+package com.johan.shared.utils
 
 fun String.toFullPosterURL() = "${URL.POSTER_URL}$this"
 
