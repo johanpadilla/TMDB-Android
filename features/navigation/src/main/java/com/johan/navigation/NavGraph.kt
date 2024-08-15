@@ -23,7 +23,7 @@ fun NavGraph(navController: NavHostController = rememberNavController()) {
             val movieId = it.arguments?.getString("id")
                 ?.let(::requireNotNull)
                 .orEmpty()
-            MovieDetailScreen(movieId)
+            MovieDetailScreen({navController.popBackStack()},movieId)
         }
     }
 }

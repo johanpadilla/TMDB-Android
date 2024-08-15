@@ -31,8 +31,7 @@ const val POPULAR_MOVIE_COLUMNS = 2
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularMovieScreen(
-   onPopularMovieClicked: (String) -> Unit,
-    //navController: NavController,
+    onPopularMovieClicked: (String) -> Unit,
     viewModel: PopularMovieViewModel = hiltViewModel()
 ) {
     val moviesState = viewModel.movies.collectAsState().value
@@ -51,7 +50,7 @@ fun PopularMovieScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                   paddingValues
+                    paddingValues
                 )
                 .testTag("popular_movie_container"),
             isRefreshing = moviesState is PopularMovieState.Loading,
@@ -89,9 +88,9 @@ fun PopularMovieScreen(
                                             popularMovie = chunkedList[index][1],
                                             onPopularMovieClick = {
                                                 onPopularMovieClicked.invoke(chunkedList[index][1].id.toString())
-                                        /*        navController.navigate(
-                                                    MovieDetailsScreen(chunkedList[index][1].id.toString())
-                                                )*/
+                                                /*        navController.navigate(
+                                                            MovieDetailsScreen(chunkedList[index][1].id.toString())
+                                                        )*/
                                             }
                                         )
                                     }

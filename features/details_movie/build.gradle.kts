@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.google.dagger.hilt)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     ksp(libs.google.dagger.hilt.compiler)
 
