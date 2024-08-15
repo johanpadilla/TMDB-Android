@@ -8,8 +8,8 @@ import coil.request.ImageRequest
 import com.johan.popular_movies.model.PopularMovie
 
 @Composable
-fun MovieCard(popularMovie: PopularMovie, onPopularMovieClick: () -> Unit) {
-    Card(onClick = { onPopularMovieClick.invoke() }) {
+fun MovieCard(popularMovie: PopularMovie, onPopularMovieClick: (String) -> Unit) {
+    Card(onClick = { onPopularMovieClick.invoke(popularMovie.id.toString()) }) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(popularMovie.fullPosterUrl).crossfade(true)

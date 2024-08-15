@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,14 +36,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.johan.details_movie.R
-import com.johan.details_movie.model.Genre
 import com.johan.details_movie.model.MovieDetailState
-import com.johan.details_movie.model.ProductionCompany
-import com.johan.details_movie.model.ProductionCountry
-import com.johan.details_movie.model.SpokenLanguage
+import com.johan.details_movie.ui.composables.Genres
+import com.johan.details_movie.ui.composables.ProductionCompany
+import com.johan.details_movie.ui.composables.ProductionCountry
+import com.johan.details_movie.ui.composables.SpokenLanguages
 import com.johan.shared.ui.CenteredMessage
 import com.johan.shared.utils.formatDateToMonthAndYear
-import com.johan.shared.utils.toFullPosterURL
 import com.johan.shared.utils.toMoneyFormat
 
 @Composable
@@ -64,7 +62,12 @@ fun MovieDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieDetailContainer(movieDetailState: MovieDetailState, onBackPressed: () -> Unit, viewModel: MovieDetailsViewModel, movieId: String?) {
+private fun MovieDetailContainer(
+    movieDetailState: MovieDetailState,
+    onBackPressed: () -> Unit,
+    viewModel: MovieDetailsViewModel,
+    movieId: String?
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -165,64 +168,6 @@ private fun Content(movieDetailState: MovieDetailState) {
 }
 
 @Composable
-private fun SpokenLanguages(spokenLanguages: List<SpokenLanguage>) {
-    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.smallHorizontalPadding)))
-    Text(text = "${stringResource(id = R.string.available_language_text)}:")
-    spokenLanguages.map {
-        it.englishName?.let { language ->
-            BulletList(text = language)
-        }
-    }
-}
-
-@Composable
-private fun ProductionCountry(countries: List<ProductionCountry>) {
-    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.smallHorizontalPadding)))
-    Column {
-        Text(text = "${stringResource(id = R.string.production_countries_text)}:")//, style = bodyBold)
-        countries.map {
-            it.name?.let { country ->
-                BulletList(text = country)
-            }
-        }
-    }
-}
-
-@Composable
-private fun ProductionCompany(companies: List<ProductionCompany>) {
-    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.smallHorizontalPadding)))
-    Column {
-        Text(text = "${stringResource(id = R.string.production_companies_text)}:")//, style = bodyBold)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.smallHorizontalPadding))) {
-            items(companies.size) { index ->
-                if (companies[index].logoPath.isNullOrEmpty().not()) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(companies[index].logoPath?.toFullPosterURL())
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(dimensionResource(id = R.dimen.rowImageHeight))
-                            //.background(color = LocalCustomColorsPalette.current.productionCompaniesBackgroundColor)
-                            .padding(dimensionResource(id = R.dimen.smallHorizontalPadding))
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Genres(genres: List<Genre>?) {
-    genres?.map {
-        it.name?.let { genre ->
-            BulletList(text = genre)
-        }
-    }
-}
-
-@Composable
 private fun Title(originalTitle: String?, releasedDate: String?) {
     originalTitle?.let {
         Text(
@@ -234,13 +179,6 @@ private fun Title(originalTitle: String?, releasedDate: String?) {
     }
 }
 
-@Composable
-private fun BulletList(text: String) {
-    Row {
-        Text(text = stringResource(id = R.string.bullet))
-        Text(text = text)
-    }
-}
 
 @Composable
 private fun MovieDetailPoster(url: String?) {

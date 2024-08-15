@@ -10,6 +10,4 @@ class MovieDetailsRepositoryImpl @Inject constructor(private val movieService: M
     override suspend fun getMovieDetail(movieId: String): MovieDetailResponse {
         return movieService.getMovieDetail(movieId)
     }
-
-
 }
