@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(project(":network"))
     implementation(project(":features:shared"))
+    testImplementation(project(":test-utils"))
 
     ksp(libs.google.dagger.hilt.compiler)
 

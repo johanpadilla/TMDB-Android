@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.google.dagger.hilt)
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    testImplementation(project(":test-utils"))
 
     ksp(libs.google.dagger.hilt.compiler)
 

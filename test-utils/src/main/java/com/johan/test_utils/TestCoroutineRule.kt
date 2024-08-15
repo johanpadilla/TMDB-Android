@@ -1,4 +1,4 @@
-package com.johan.popular_movies
+package com.johan.test_utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -3,10 +3,10 @@ package com.johan.popular_movies.ui
 import app.cash.turbine.test
 import com.johan.network.model.PopularMovieResponse
 import com.johan.network.model.Results
-import com.johan.popular_movies.TestCoroutineRule
 import com.johan.popular_movies.model.PopularMovieRepository
 import com.johan.popular_movies.model.PopularMovieState
 import com.johan.popular_movies.model.toPopularMovie
+import com.johan.test_utils.TestCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
