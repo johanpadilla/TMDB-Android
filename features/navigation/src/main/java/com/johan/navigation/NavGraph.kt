@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.johan.popular_movies.ui.PopularMoviesContainer
+import com.johan.popular_movies.ui.PopularMovieScreen
 
 @Composable
 fun NavGraph(navController: NavHostController = rememberNavController()) {
@@ -14,7 +14,7 @@ fun NavGraph(navController: NavHostController = rememberNavController()) {
         startDestination = Destinations.PopularMovie
     ) {
         composable<Destinations.PopularMovie> {
-            PopularMoviesContainer()
+            PopularMovieScreen()
         }
     }
 }

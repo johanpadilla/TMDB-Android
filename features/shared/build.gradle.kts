@@ -2,12 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.google.dagger.hilt)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.johan.popular_movies"
+    namespace = "com.johan.shared"
     compileSdk = 35
 
     defaultConfig {
@@ -33,13 +31,13 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
-
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
@@ -48,24 +46,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.google.dagger.hilt)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.coil)
     implementation(libs.coil.compose)
-    implementation(project(":network"))
-    implementation(project(":features:shared"))
 
-    ksp(libs.google.dagger.hilt.compiler)
-
-    kspAndroidTest(libs.google.dagger.hilt.compiler)
-    androidTestImplementation(libs.dagger.hilt.android.testing)
     testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockito)
-    testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.androidx.core.testing)
-    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
