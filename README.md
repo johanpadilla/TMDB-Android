@@ -19,10 +19,11 @@ Android-Kotlin based application, which demonstrate knowledge of Android trends 
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variable to the local.properties file located in the root of the project.
-Ask for the token to the recruiter.
+To run this project, you will need to add the following environment variable to a new file called secret.properties file and located it in the root of the project.
+Ask for the token, or generate it using the TMDB service.
 
-`token=""`
+`API_URL=""`
+`ACCESS_TOKEN=""`
 
 
 ## Features
