@@ -50,6 +50,7 @@ import com.johan.details_movie.ui.composables.ProductionCountry
 import com.johan.details_movie.ui.composables.SpokenLanguages
 import com.johan.shared.ui.CenteredMessage
 import com.johan.shared.ui.PullToRefreshContainer
+import com.johan.shared.ui.theme.titleLarge
 import com.johan.shared.utils.formatDateToMonthAndYear
 import com.johan.shared.utils.toMoneyFormat
 import kotlinx.coroutines.launch
@@ -233,7 +234,7 @@ private fun Title(originalTitle: String?, releasedDate: String?) {
         Text(
             text = "$it $releasedDate",
             textAlign = TextAlign.Center,
-            //style = titleLarge
+            style = titleLarge
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.smallHorizontalPadding)))
     }

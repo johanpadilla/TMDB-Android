@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.johan.android.ui.theme.TMDBAndroidTheme
+import com.johan.shared.ui.theme.TMDBAndroidTheme
 import com.johan.android.navigation.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
 

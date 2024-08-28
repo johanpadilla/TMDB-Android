@@ -1,5 +1,6 @@
 package com.johan.details_movie.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.johan.details_movie.R
 import com.johan.details_movie.model.ProductionCompany
+import com.johan.shared.ui.theme.LocalCustomColorsPalette
 import com.johan.shared.utils.toFullPosterURL
 
 @Composable
@@ -34,7 +36,7 @@ fun ProductionCompany(companies: List<ProductionCompany>) {
                         contentDescription = null,
                         modifier = Modifier
                             .height(dimensionResource(id = R.dimen.rowImageHeight))
-                            //.background(color = LocalCustomColorsPalette.current.productionCompaniesBackgroundColor)
+                            .background(color = LocalCustomColorsPalette.current.productionCompaniesBackgroundColor)
                             .padding(dimensionResource(id = R.dimen.smallHorizontalPadding))
                     )
                 }
