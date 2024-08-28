@@ -31,7 +31,6 @@ Ask for the token to the recruiter.
 - Pull to refresh.
 - Network Image Loading.
 - State management.
-- Portrait mode only.
 
 Using the https://api.themoviedb.org/ service to fetch data.
 
