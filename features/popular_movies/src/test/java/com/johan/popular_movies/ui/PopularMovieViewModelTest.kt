@@ -1,56 +1,48 @@
 package com.johan.popular_movies.ui
 
 import app.cash.turbine.test
+import com.johan.network.NetworkResponse
 import com.johan.network.model.PopularMovieResponse
 import com.johan.network.model.Results
 import com.johan.popular_movies.model.PopularMovieRepository
 import com.johan.popular_movies.model.PopularMovieState
 import com.johan.popular_movies.model.toPopularMovie
-import com.johan.test_utils.TestCoroutineRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.johan.test_utils.CoroutineRuleDispatcher
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.anyInt
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PopularMovieViewModelTest {
-
-    private lateinit var viewModel: PopularMovieViewModel
     private val repository: PopularMovieRepository = mock()
 
+    private lateinit var viewModel: PopularMovieViewModel
+
     @get: Rule
-    val testCoroutineRule = TestCoroutineRule()
+    val testCoroutineRule = CoroutineRuleDispatcher()
 
     @Before
     fun setup() {
-        viewModel = PopularMovieViewModel(repository, testCoroutineRule.testDispatcher)
+        viewModel = PopularMovieViewModel(repository)
     }
 
     @Test
     fun initialStateIsLoading() = runTest {
-        advanceUntilIdle()
-        val shouldBeLoading = viewModel.movies.first()
+        val shouldBeLoading = viewModel.popularMovies.first()
 
         assert(shouldBeLoading is PopularMovieState.Loading)
     }
 
     @Test
     fun loadedPopularMovieShouldBeLoadedState() = runTest {
-        advanceUntilIdle()
-        val page = 1
         val popularMovieResponse = PopularMovieResponse(
             results = listOf(Results()), page = 0, totalPages = 0
         )
-        val params = mutableMapOf(("language" to "en-US"))
-        params.putAll(mapOf(("page" to page.toString())))
-        whenever(repository.getPopularMovies(params)).thenReturn(
-            popularMovieResponse
+        whenever(repository.getPopularMovies()).thenReturn(
+            NetworkResponse.Success(popularMovieResponse)
         )
 
         val loadedPopular = PopularMovieState.Loaded(
@@ -58,8 +50,9 @@ class PopularMovieViewModelTest {
             currentPage = popularMovieResponse.page,
             movies = popularMovieResponse.results.map { it.toPopularMovie() })
 
-        viewModel.movies.test {
-            //viewModel.getMovies(page)
+        viewModel.getPopularMovies()
+
+        viewModel.popularMovies.test {
             val shouldBeLoading = awaitItem()
             assert(shouldBeLoading is PopularMovieState.Loading)
             val shouldBeLoaded = awaitItem()
@@ -70,12 +63,12 @@ class PopularMovieViewModelTest {
 
     @Test
     fun noResultsShouldBeEmptyState() = runTest {
-        advanceUntilIdle()
-        val page = anyInt()
-        val params = mutableMapOf(("language" to "en-US"))
-        params.putAll(mapOf(("page" to page.toString())))
+        whenever(repository.getPopularMovies()).thenReturn(
+            NetworkResponse.Success(PopularMovieResponse())
+        )
 
-        viewModel.movies.test {
+        viewModel.popularMovies.test {
+            viewModel.getPopularMovies()
             val shouldBeLoading = awaitItem()
             assert(shouldBeLoading is PopularMovieState.Loading)
             val shouldBeEmpty = awaitItem()
@@ -85,22 +78,65 @@ class PopularMovieViewModelTest {
 
     @Test
     fun withRestartNoResultsShouldBeEmptyState() = runTest {
-        advanceUntilIdle()
-        val page = anyInt()
-        val params = mutableMapOf(("language" to "en-US"))
-        params.putAll(mapOf(("page" to page.toString())))
+        whenever(repository.getPopularMovies()).thenReturn(
+            NetworkResponse.Success(PopularMovieResponse())
+        )
 
-        viewModel.movies.test {
+        viewModel.popularMovies.test {
+            viewModel.getPopularMovies()
+
             val shouldBeLoading = awaitItem()
             assert(shouldBeLoading is PopularMovieState.Loading)
             val shouldBeEmpty = awaitItem()
             assert(shouldBeEmpty is PopularMovieState.Empty)
 
-            viewModel.restart()
+            viewModel.refresh(true)
             val shouldBeLoading2 = awaitItem()
             assert(shouldBeLoading2 is PopularMovieState.Loading)
             val shouldBeEmpty2 = awaitItem()
             assert(shouldBeEmpty2 is PopularMovieState.Empty)
+        }
+    }
+
+    @Test
+    fun withRestartResultsShouldBeLoadedState() = runTest {
+        val popularMovieResponse = PopularMovieResponse(
+            results = listOf(Results()), page = 0, totalPages = 0
+        )
+
+        whenever(repository.getPopularMovies()).thenReturn(
+            NetworkResponse.Success(popularMovieResponse)
+        )
+
+        viewModel.popularMovies.test {
+            viewModel.getPopularMovies()
+
+            val shouldBeLoading = awaitItem()
+            assert(shouldBeLoading is PopularMovieState.Loading)
+            val shouldBeLoadedNotRefreshing = awaitItem()
+            assert((shouldBeLoadedNotRefreshing as PopularMovieState.Loaded).isRefreshing.not())
+
+            viewModel.refresh(false)
+            val shouldBeLoadedRefreshing = awaitItem()
+            assert((shouldBeLoadedRefreshing as PopularMovieState.Loaded).isRefreshing)
+
+            val shouldBeLoadedNotRefreshing2 = awaitItem()
+            assert((shouldBeLoadedNotRefreshing2 as PopularMovieState.Loaded).isRefreshing.not())
+        }
+    }
+
+    @Test
+    fun errorPopularMovieShouldBeErrorState() = runTest {
+        whenever(repository.getPopularMovies()).thenReturn(
+            NetworkResponse.NetworkError(Throwable())
+        )
+
+        viewModel.popularMovies.test {
+            viewModel.getPopularMovies()
+            val shouldBeLoading = awaitItem()
+            assert(shouldBeLoading is PopularMovieState.Loading)
+            val shouldBeError = awaitItem()
+            assert(shouldBeError is PopularMovieState.Error)
         }
     }
 }

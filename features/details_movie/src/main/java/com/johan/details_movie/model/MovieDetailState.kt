@@ -6,7 +6,8 @@ import com.johan.shared.utils.toFullPosterURL
 sealed class MovieDetailState {
     data object Loading : MovieDetailState()
     data class Loaded(
-        val movieDetail: MovieDetail? = null
+        val movieDetail: MovieDetail? = null,
+        val isRefreshing: Boolean = false,
     ) : MovieDetailState()
 
     data object Empty : MovieDetailState()

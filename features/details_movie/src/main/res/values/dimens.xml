@@ -5,4 +5,5 @@
     <dimen name="smallVerticalPadding">8dp</dimen>
 
     <dimen name="rowImageHeight">48dp</dimen>
+    <dimen name="landscapeMovieDetailSpacing">140.dp</dimen>
 </resources>

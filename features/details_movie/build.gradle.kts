@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 dependencies {
@@ -42,6 +48,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
+    implementation(libs.material)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.google.dagger.hilt)

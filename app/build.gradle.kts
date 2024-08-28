@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:navigation"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -66,7 +65,9 @@ dependencies {
     implementation(libs.google.dagger.hilt)
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.navigation.compose)
-
+    implementation(project(":features:popular_movies"))
+    implementation(project(":features:details_movie"))
+    implementation(project(":features:shared"))
     ksp(libs.google.dagger.hilt.compiler)
 
 

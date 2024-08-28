@@ -1,74 +1,94 @@
 package com.johan.details_movie.ui
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.johan.details_movie.model.MovieDetail
 import com.johan.details_movie.model.MovieDetailState
 import com.johan.details_movie.model.MovieDetailsRepository
+import com.johan.network.NetworkResponse
 import com.johan.network.model.MovieDetailResponse
-import com.johan.test_utils.TestCoroutineRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.johan.shared.navigation.Argument
+import com.johan.test_utils.CoroutineRuleDispatcher
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class DetailsMovieViewModelTest {
+class MovieDetailsViewModelTest {
+
     private val repository: MovieDetailsRepository = mock()
+    private val savedStateHandle: SavedStateHandle = mock()
+
     private lateinit var viewModel: MovieDetailsViewModel
 
     @get: Rule
-    val testCoroutineRule = TestCoroutineRule()
+    val coroutineRuleDispatcher = CoroutineRuleDispatcher()
 
-    @Before
-    fun setup() {
-        viewModel = MovieDetailsViewModel(repository, testCoroutineRule.testDispatcher)
-    }
+    private val MOVIE_ID = "1234-ABC"
 
     @Test
     fun initialStateIsLoading() = runTest {
-        advanceUntilIdle()
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
         val shouldBeLoading = viewModel.detail.first()
 
         assert(shouldBeLoading is MovieDetailState.Loading)
     }
 
     @Test
-    fun nullMovieIdShouldBeErrorState() = runTest {
-        advanceUntilIdle()
+    fun nullMOVIE_IDShouldBeErrorState() = runTest {
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            null
+        )
 
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
         viewModel.detail.test {
-            viewModel.getMovieDetail(null)
             val resultState = expectMostRecentItem()
             assert(resultState is MovieDetailState.Error)
         }
     }
 
     @Test
-    fun withMovieIdButNullBodyResponseShouldBeEmptyState() = runTest {
-        advanceUntilIdle()
-        val movieId = "12345-abc"
+    fun withMOVIE_IDButNullBodyResponseShouldBeEmptyState() = runTest {
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
+        whenever(repository.getMovieDetail(MOVIE_ID)).thenReturn(
+            NetworkResponse.Success(
+                MovieDetailResponse()
+            )
+        )
         viewModel.detail.test {
-            viewModel.getMovieDetail(movieId)
+            viewModel.getMovieDetail(MOVIE_ID)
+
             val shouldBeLoading = awaitItem()
             assert(shouldBeLoading is MovieDetailState.Loading)
+
             val shouldBeEmpty = awaitItem()
             assert(shouldBeEmpty is MovieDetailState.Empty)
         }
     }
 
     @Test
-    fun withMovieIdShouldBeLoadedState() = runTest {
-        advanceUntilIdle()
-        val movieId = "12345-abc"
+    fun withMOVIE_IDShouldBeLoadedState() = runTest {
         val title = "title"
-        whenever(repository.getMovieDetail(movieId)).thenReturn(
-            MovieDetailResponse(
-                title = title
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
+        whenever(repository.getMovieDetail(MOVIE_ID)).thenReturn(
+            NetworkResponse.Success(
+                MovieDetailResponse(
+                    title = title
+                )
             )
         )
         val movieDetail = MovieDetail(
@@ -78,9 +98,11 @@ class DetailsMovieViewModelTest {
         val loadedMovieDetail = MovieDetailState.Loaded(movieDetail = movieDetail)
 
         viewModel.detail.test {
-            viewModel.getMovieDetail(movieId)
+            viewModel.getMovieDetail(MOVIE_ID)
+
             val shouldBeLoading = awaitItem()
             assert(shouldBeLoading is MovieDetailState.Loading)
+
             val shouldBeEmpty = awaitItem()
             assert(shouldBeEmpty is MovieDetailState.Loaded)
             assert(
@@ -88,6 +110,92 @@ class DetailsMovieViewModelTest {
                     loadedMovieDetail.movieDetail?.title
                 )
             )
+        }
+    }
+
+    @Test
+    fun withRestartNoResultsShouldBeEmptyState() = runTest {
+        val popularMovieResponse = MovieDetailResponse()
+
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
+        whenever(repository.getMovieDetail(MOVIE_ID)).thenReturn(
+            NetworkResponse.Success(popularMovieResponse)
+        )
+
+        viewModel.detail.test {
+            viewModel.getMovieDetail(MOVIE_ID)
+
+            val shouldBeLoading = awaitItem()
+            assert(shouldBeLoading is MovieDetailState.Loading)
+            val shouldBeEmpty = awaitItem()
+            assert(shouldBeEmpty is MovieDetailState.Empty)
+
+            viewModel.onRefresh(true)
+            val shouldBeLoading2 = awaitItem()
+            assert(shouldBeLoading2 is MovieDetailState.Loading)
+
+            val shouldBeEmpty2 = awaitItem()
+            assert(shouldBeEmpty2 is MovieDetailState.Empty)
+        }
+    }
+
+    @Test
+    fun withRestartResultsShouldBeLoadedState() = runTest {
+        val title = "title"
+
+        val popularMovieResponse = MovieDetailResponse(
+            title = title
+        )
+
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
+        whenever(repository.getMovieDetail(MOVIE_ID)).thenReturn(
+            NetworkResponse.Success(popularMovieResponse)
+        )
+
+        viewModel.detail.test {
+            viewModel.getMovieDetail(MOVIE_ID)
+
+            val shouldBeLoading = awaitItem()
+            assert(shouldBeLoading is MovieDetailState.Loading)
+            val shouldBeLoadedNotRefreshing = awaitItem()
+            assert((shouldBeLoadedNotRefreshing as MovieDetailState.Loaded).isRefreshing.not())
+
+            viewModel.onRefresh(false)
+            val shouldBeLoadedRefreshing = awaitItem()
+            assert((shouldBeLoadedRefreshing as MovieDetailState.Loaded).isRefreshing)
+
+            val shouldBeLoadedNotRefreshing2 = awaitItem()
+            assert((shouldBeLoadedNotRefreshing2 as MovieDetailState.Loaded).isRefreshing.not())
+        }
+    }
+
+    @Test
+    fun errorMovieDetailShouldBeErrorState() = runTest {
+
+        whenever(savedStateHandle.get<String>(Argument.MOVIE_ID_KEY)).thenReturn(
+            MOVIE_ID
+        )
+
+        viewModel = MovieDetailsViewModel(repository, savedStateHandle)
+        whenever(repository.getMovieDetail(MOVIE_ID)).thenReturn(
+            NetworkResponse.NetworkError(Throwable())
+        )
+        viewModel.detail.test {
+            viewModel.getMovieDetail(MOVIE_ID)
+
+            val shouldBeLoading = awaitItem()
+            assert(shouldBeLoading is MovieDetailState.Loading)
+
+            val shouldBeError = awaitItem()
+            assert(shouldBeError is MovieDetailState.Error)
         }
     }
 }
